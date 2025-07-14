@@ -3,12 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\Interfaces\LoanRepositoryInterface;
-use App\Repositories\LoanRepository;
-use App\Repositories\Interfaces\EmiRepositoryInterface;
-use App\Repositories\EmiRepository;
-
-
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,15 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            LoanRepositoryInterface::class,
-            LoanRepository::class
-        );
-
-        $this->app->bind(
-            EmiRepositoryInterface::class,
-            EmiRepository::class
-        );
+        //
     }
 
     /**
@@ -34,6 +20,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        
     }
 }

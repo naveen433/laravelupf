@@ -1,39 +1,55 @@
+version: '3.8'
+
 services:
- app:
-   build:
-     context: .
-     target: base
-   container_name: emi-test
-   restart: unless-stopped
-   volumes:
+  #Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravelupfin
+    container_name: laravel-upfin
+    ports:
+      - "9000:9000"
+    volumes:
      - ./:/var/www
      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-   depends_on:
-      - db
+    depends_on:
+      - database
 
- nginx:
-   image: nginx:alpine
-   container_name: emi-test-nginx
-   restart: unless-stopped
-   ports:
-     - "8000:80"
-   volumes:
+  #Webserver
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-laravel-upfin
+    restart: unless-stopped
+    ports: 
+      - 9001:80
+    volumes:
      - ./:/var/www
      - ./nginx/conf.d/:/etc/nginx/conf.d/
 
- db:
+  #Database Service
+  database:
     image: mysql:8.4
-    container_name: emi-test-db
     environment:
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
-     - dbdata:/var/lib/mysql
+      - dbdata:/var/lib/mysql
     ports:
-      - 3306:3306
-
-
+      - "3307:3306"
+  phpmyadmin:
+    image: phpmyadmin:fpm-alpine
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+    restart: unless-stopped
+    expose:
+      - 8080:80
+    depends_on:
+      - database
 volumes:
- dbdata: ~
+  dbdata: ~
+

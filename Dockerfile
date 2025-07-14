@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine as base
+FROM php:8.3-fpm-alpine
 
 # Set working directory
 WORKDIR /var/www
@@ -19,12 +19,9 @@ RUN apk add --no-cache \
     zlib-dev \
     libxml2-dev \
     shadow \
-    postgresql-dev \
-    mariadb-dev \
     && docker-php-ext-install \
         pdo \
         pdo_mysql \
-        pdo_pgsql \
         zip \
         intl \
         mbstring \
@@ -47,7 +44,7 @@ COPY . /var/www
 # Install dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Set permissions (adjust as needed)
+# Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Expose port (default for php-fpm is 9000)
@@ -55,3 +52,4 @@ EXPOSE 9000
 
 # Start php-fpm server
 CMD ["php-fpm"]
+
