@@ -22,7 +22,7 @@ services:
     container_name: nginx-laravel-upfin
     restart: unless-stopped
     ports: 
-      - 9001:80
+      - 8000:80
     volumes:
      - ./:/var/www
      - ./nginx/conf.d/:/etc/nginx/conf.d/
@@ -38,7 +38,7 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "3306:3306"
   phpmyadmin:
     image: phpmyadmin:fpm-alpine
     container_name: phpmyadmin
